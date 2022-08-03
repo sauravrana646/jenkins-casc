@@ -87,8 +87,8 @@ security:
     authenticators:
     - project :
         strategy:
-          - specificUsersAuthorizationStrategy
-          - triggeringUsersAuthorizationStrategy
+          - "specificUsersAuthorizationStrategy"
+          - "triggeringUsersAuthorizationStrategy"
     # - global :
     #     strategy:
     #       specificUsersAuthorizationStrategy:
