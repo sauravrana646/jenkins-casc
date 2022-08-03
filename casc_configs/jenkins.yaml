@@ -85,11 +85,12 @@ globalCredentialsConfiguration:
 security:
   queueItemAuthenticator:
     authenticators:
-    - global :
-        strategy:
-          specificUsersAuthorizationStrategy:
-            userid: admin
-            password: ${adminpw:-adminpass}
+    - project
+    # - global :
+    #     strategy:
+    #       specificUsersAuthorizationStrategy:
+    #         userid: admin
+    #         password: ${adminpw:-adminpass}
   apiToken:
     creationOfLegacyTokenEnabled: false
     tokenGenerationOnCreationEnabled: false
