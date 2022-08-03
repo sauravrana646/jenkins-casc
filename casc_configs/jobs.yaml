@@ -1,6 +1,7 @@
 jobs:
+  - url : https://bitbucket.org/saurav_unthinkable/jenkins-jcasc/raw/43945b978e9809a01fa6b85c93fd84498971044b/simple_job.groovy 
   - script: >
-      job('example'){
+      job('seed-example'){
         steps {
           shell('echo Hello World!')
         }

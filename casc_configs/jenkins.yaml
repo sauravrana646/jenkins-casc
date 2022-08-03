@@ -5,15 +5,15 @@ credentials:
       - usernamePassword:
           description: "github username/password"
           id: "github-user"
-          password: "{AQAAABAAAAAQDsEt/WtBfSyDFXfZEsVXMVo9b8ZmvbQaOkFc8mbWc/M=}"
+          password: ${github:-password}
           scope: GLOBAL
-          username: "saurav123"
+          username: "sauravrana646"
       - usernamePassword:
-          description: "test for creds"
-          id: "test123"
-          password: "{AQAAABAAAAAQo2JZ2dV0xgYlQobbISn7EsXRoUmgM6DUaJ5jTSf4j94=}"
+          description: "admin creds"
+          id: "admin"
+          password: ${passwd:-test}
           scope: GLOBAL
-          username: "test123"
+          username: "admin"
 jenkins:
   agentProtocols:
   - "JNLP4-connect"
@@ -55,6 +55,7 @@ jenkins:
       enableCaptcha: false
       users:
       - id: "admin"
+        password: ${adminpw:-adminpass}
         name: "admin"
         properties:
         - "apiToken"

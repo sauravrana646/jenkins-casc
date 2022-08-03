@@ -11,5 +11,14 @@ services:
     volumes:
       - /home/ec2-user/jenkins_home:/var/jenkins_home
       - ./casc_configs:/var/jenkins_conf
+    secrets:
+      - github
+      - adminpw
     environment:
       - CASC_JENKINS_CONFIG=/var/jenkins_conf
+secrets:
+  github:
+    file: /home/ec2-user/passwords/github
+  adminpw:
+    file: /home/ec2-user/passwords/adminpw
+

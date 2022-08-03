@@ -19,4 +19,4 @@ plain-credentials:latest
 scm-api:latest
 ssh-credentials:latest
 workflow-job:latest
-
+authorize-project:latest
