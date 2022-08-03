@@ -85,7 +85,10 @@ globalCredentialsConfiguration:
 security:
   queueItemAuthenticator:
     authenticators:
-    - project
+    - project :
+        strategy:
+          - specificUsersAuthorizationStrategy
+          - triggeringUsersAuthorizationStrategy
     # - global :
     #     strategy:
     #       specificUsersAuthorizationStrategy:
