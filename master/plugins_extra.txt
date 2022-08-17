@@ -20,3 +20,5 @@ scm-api:latest
 ssh-credentials:latest
 workflow-job:latest
 authorize-project:latest
+docker-workflow:latest
+ssh-slaves:latest

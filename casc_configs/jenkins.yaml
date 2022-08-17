@@ -2,6 +2,15 @@ credentials:
   system:
     domainCredentials:
     - credentials:
+      - basicSSHUserPrivateKey:
+          description: "Credentials for jenkins agent"
+          id: "jenkins-agent"
+          privateKeySource:
+            directEntry:
+             privateKey: ${agent-key}
+          scope: GLOBAL
+          username: "ec2-user"
+          usernameSecret: true
       - usernamePassword:
           description: "github username/password"
           id: "github-user"
@@ -25,6 +34,45 @@ jenkins:
         - "Overall/Administer:admin"
         #- "Overall/Read:anonymous"
         #- "View/Read:anonymous"
+  clouds:
+  - ecs:
+      credentialsId: ""
+      cluster: "arn:aws:ecs:ap-south-1:971532881571:cluster/Jenkins-Slave"
+      jenkinsUrl: "http://43.204.24.251:80"
+      name: "Jenkins-slave"
+      regionName: "ap-south-1"
+      slaveTimeoutInSeconds: 3600
+      templates:
+      - assignPublicIp: true
+        cpu: 1024
+        cpuArchitecture: "X86_64"
+        defaultCapacityProvider: false
+        enableExecuteCommand: false
+        executionRole: "arn:aws:iam::971532881571:role/Jenkins-ECS-Full-access"
+        image: "jenkins/inbound-agent"
+        label: "ecs"
+        launchType: "FARGATE"
+        logDriver: "awslogs"
+        logDriverOptions:
+        - name: "awslogs-group"
+          value: "ECSLogGroup-jenkins-for-ecs-with-agents"
+        - name: "awslogs-region"
+          value: "ap-south-1"
+        - name: "awslogs-stream-prefix"
+          value: "jenkins-agent"
+        memory: 0
+        memoryReservation: 2048
+        networkMode: "awsvpc"
+        operatingSystemFamily: "LINUX"
+        platformVersion: "LATEST"
+        privileged: false
+        remoteFSRoot: "/home/jenkins/"
+        securityGroups: "sg-07e33c563300530c7"
+        sharedMemorySize: 0
+        subnets: "subnet-0a3d1b9911420709d,subnet-0d088e08b579f472a,subnet-0f0ad26d7e55dbe92"
+        taskrole: "arn:aws:iam::971532881571:role/Jenkins-ECS-Full-access"
+        templateName: "jenkinsTask"
+        uniqueRemoteFSRoot: false
   crumbIssuer:
     standard:
       excludeClientIPFromCrumb: false
@@ -40,6 +88,20 @@ jenkins:
   markupFormatter: "plainText"
   mode: NORMAL
   myViewsTabBar: "standard"
+  nodes:
+  - permanent:
+      labelString: "jenkins-agent"
+      launcher:
+        ssh:
+          credentialsId: "jenkins-agent"
+          host: "43.204.24.226"
+          port: 22
+          sshHostKeyVerificationStrategy: "nonVerifyingKeyVerificationStrategy"
+      mode: EXCLUSIVE
+      name: "Jenkins-agent"
+      nodeDescription: "Jenkins agent for jobs"
+      remoteFS: "/home/ec2-user/agent/"
+      retentionStrategy: "always"
   numExecutors: 1
   primaryView:
     all:
@@ -85,15 +147,9 @@ globalCredentialsConfiguration:
 security:
   queueItemAuthenticator:
     authenticators:
-    - project :
-        strategy:
-          - "specificUsersAuthorizationStrategy"
-          - "triggeringUsersAuthorizationStrategy"
-    # - global :
-    #     strategy:
-    #       specificUsersAuthorizationStrategy:
-    #         userid: admin
-    #         password: ${adminpw:-adminpass}
+    - global :
+       strategy:
+        "triggeringUsersAuthorizationStrategy"
   apiToken:
     creationOfLegacyTokenEnabled: false
     tokenGenerationOnCreationEnabled: false
@@ -147,7 +203,7 @@ unclassified:
     storage: "file"
   location:
     adminAddress: "admin@me.me"
-    url: "http://localhost/"
+    url: "http://`(curl http://169.254.169.254/latest/meta-data/public-ipv4)`/"
   mailer:
     charset: "UTF-8"
     useSsl: false

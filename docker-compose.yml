@@ -14,6 +14,7 @@ services:
     secrets:
       - github
       - adminpw
+      - agent-key
     environment:
       - CASC_JENKINS_CONFIG=/var/jenkins_conf
 secrets:
@@ -21,4 +22,6 @@ secrets:
     file: /home/ec2-user/passwords/github
   adminpw:
     file: /home/ec2-user/passwords/adminpw
+  agent-key:
+    file: /home/ec2-user/passwords/agent-key
 
