@@ -22,3 +22,4 @@ workflow-job:latest
 authorize-project:latest
 docker-workflow:latest
 ssh-slaves:latest
+<add aws ecs plugin here >
