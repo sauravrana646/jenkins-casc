@@ -36,26 +36,26 @@ jenkins:
         #- "View/Read:anonymous"
   clouds:
   - ecs:
-      credentialsId: ""
-      cluster: "arn:aws:ecs:ap-south-1:971532881571:cluster/Jenkins-Slave"
-      jenkinsUrl: "http://43.204.24.251:80"
+      credentialsId: ""                # needed  as null in JCasC if we want it to  access through IAM role instead of AWS Credentials.
+      cluster: "arn:aws:ecs:ap-south-1:<Account ID>:cluster/Jenkins-Slave"
+      jenkinsUrl: "http://43.204.24.251:80"                  # jenkins master url 
       name: "Jenkins-slave"
       regionName: "ap-south-1"
       slaveTimeoutInSeconds: 3600
       templates:
-      - assignPublicIp: true
+      - assignPublicIp: true             # needed so that agent can connect to the internet and jenkins master
         cpu: 1024
         cpuArchitecture: "X86_64"
         defaultCapacityProvider: false
         enableExecuteCommand: false
-        executionRole: "arn:aws:iam::971532881571:role/Jenkins-ECS-Full-access"
-        image: "jenkins/inbound-agent"
+        executionRole: "arn:aws:iam::<Account ID>:role/Jenkins-ECS-Full-access"
+        image: "jenkins/inbound-agent"   #image name for jenkins slave agent
         label: "ecs"
         launchType: "FARGATE"
         logDriver: "awslogs"
         logDriverOptions:
         - name: "awslogs-group"
-          value: "ECSLogGroup-jenkins-for-ecs-with-agents"
+          value: "ECSLogGroup-jenkins-for-ecs-with-agents"      # Create this log group also in aws cloud watch logs
         - name: "awslogs-region"
           value: "ap-south-1"
         - name: "awslogs-stream-prefix"
@@ -70,7 +70,7 @@ jenkins:
         securityGroups: "sg-07e33c563300530c7"
         sharedMemorySize: 0
         subnets: "subnet-0a3d1b9911420709d,subnet-0d088e08b579f472a,subnet-0f0ad26d7e55dbe92"
-        taskrole: "arn:aws:iam::971532881571:role/Jenkins-ECS-Full-access"
+        taskrole: "arn:aws:iam::<Account ID>:role/Jenkins-ECS-Full-access"
         templateName: "jenkinsTask"
         uniqueRemoteFSRoot: false
   crumbIssuer:
@@ -203,7 +203,7 @@ unclassified:
     storage: "file"
   location:
     adminAddress: "admin@me.me"
-    url: "http://`(curl http://169.254.169.254/latest/meta-data/public-ipv4)`/"
+    url: "http://`(curl http://169.254.169.254/latest/meta-data/public-ipv4)`/" # so that jenkins IP is update with EC2 Public IP
   mailer:
     charset: "UTF-8"
     useSsl: false
